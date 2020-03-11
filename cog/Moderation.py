@@ -110,6 +110,7 @@ class Mod(commands.Cog, name="Mod"):
     @commands.has_permissions(manage_messages=True)
     async def purge(
             self, ctx, amount: int, *, word: typing.Union[discord.Member, str] = None, user: discord.Member = None):
+        """Purges text channels"""
         if isinstance(word, discord.Member) and user is None:
             await ctx.channel.purge(limit=amount + 1, check=lambda e: e.author == word)
             await ctx.send(f"Purged {amount} messages from **{word}**.", delete_after=15)
@@ -236,10 +237,12 @@ class Mod(commands.Cog, name="Mod"):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def move(self, ctx, member: discord.Member, channel: discord.VoiceChannel):
+        """Move a member to a vc"""
         await ctx.send(f"Moving {ctx.author.mention} to {channel}")
         await member.move_to(channel)
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
+    @commands.has_permissions(manage_messages=True)
     async def antiraid(self, ctx):
         """Checks if anti-raid mode is enabled"""
         if self.raidmode is not None:
@@ -249,6 +252,7 @@ class Mod(commands.Cog, name="Mod"):
         await ctx.send("Anti-raid mode is disabled.")
     
     @antiraid.command()
+    @commands.has_permissions(manage_messages=True)
     async def on(self, ctx):
         """Turns on anti-raid mode"""
         for c in ctx.guild.text_channels:
@@ -261,6 +265,7 @@ class Mod(commands.Cog, name="Mod"):
         self.raidmode[ctx.guild.id] = True
     
     @antiraid.command()
+    @commands.has_permissions(manage_messages=True)
     async def off(self, ctx):
         """Turns off anti-raid mode"""
         if self.raidmode[ctx.guild.id] is True:
@@ -346,17 +351,18 @@ class Mod(commands.Cog, name="Mod"):
         await self.client.process_commands(message)
 
 
-
     
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def block(self, ctx, user: Sinner=None):
         """Blocks a user from chatting in current channel"""
-        await ctx.set_permissions(user, send_messages=False)
+        await ctx.channel.set_permissions(user, send_messages=False)
 
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def unblock(self, ctx, user: Sinner=None):
         """Unblocks a user from current channel"""
-        await ctx.set_permissions(user, send_messages=True)
+        await ctx.channel.set_permissions(user, send_messages=True)
 
 
 def setup(client):

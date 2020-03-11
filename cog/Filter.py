@@ -8,9 +8,12 @@ from discord.ext import commands
 from profanity import profanity
 import sqlite3
 
+
 db = sqlite3.connect('main.sqlite', check_same_thread=False)
 cursor = db.cursor()
 CURSES = ("nigger", "nigga", "dick", "cunt", "anal", "blowjob", "blow job", "dyke", "fag", "faggot", "jizz", "nig", "wank", "whore", "slut", "retard", "retarded", "bitch")
+
+
 
 class automod:
     async def check_curses(self, message):
@@ -30,9 +33,9 @@ class Filter(commands.Cog, name="Filter"):
         if profanity.contains_profanity(message.content):
             await message.delete()
             await message.author.send(f"{message.author.mention} don't use that type of language")
-            return
+            return 
         elif not await automod.check_curses(self, message):
-            return
+            return 
         await self.client.process_commands(message)
         
 
@@ -42,8 +45,10 @@ class Filter(commands.Cog, name="Filter"):
         if profanity.contains_profanity(message.content):
             await message.delete()
             await message.author.send(f"{message.author.mention} don't use that type of language")
+            return
         elif not await automod.check_curses(self, message):
             return
+
         await self.client.process_commands(message)
 
 

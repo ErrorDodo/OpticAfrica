@@ -6,7 +6,11 @@ import traceback
 import discord
 from discord.ext import commands
 
-
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='Event.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 
 class Events(commands.Cog):
@@ -15,65 +19,13 @@ class Events(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if not message.guild:
-            return await self.client.process_commands(message)
-   
-        if message.author.guild_permissions.manage_messages:
-            return 
 
-        elif "https://discord.gg" in message.content:
-            await message.delete()
-            
-            try:
-                await message.author.send("Don't post discord invite links")
-                
-            except discord.Forbidden:
-                await message.channel.send("Don't post discord invite links.")
-                
-        
-        elif "discord.gg" in message.content:
-            await message.delete()
-            
-            try:
-                await message.author.send("Don't post discord invite links")
-                
-            except discord.Forbidden:
-                await message.channel.send("Don't post discord invite links")
-        await self.client.process_commands(message)
+
+
                 
         
 
-    @commands.Cog.listener()
-    async def on_message_edit(self, before, after):
-        message = after
-        if not message.guild:
-            return 
-        
-        if message.author.guild_permissions.manage_messages:
-            return 
 
-        elif "https://discord.gg" in message.content:
-            await message.delete()
-            
-            try:
-                await message.author.send("Don't post discord invite links")
-                
-            except discord.Forbidden:
-                await message.channel.send("Don't post discord invite links.")
-                
-        
-        elif "discord.gg" in message.content:
-            await message.delete()
-            
-            try:
-                await message.author.send("Don't post discord invite links")
-                
-            except discord.Forbidden:
-                await message.channel.send("Don't post discord invite links")
-                
-        await self.client.process_commands(message)
 
 
 def setup(client):

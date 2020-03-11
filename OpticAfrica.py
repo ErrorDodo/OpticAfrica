@@ -10,8 +10,6 @@ import json
 import io
 import os
 import sqlite3
-from regex import regex as re
-
 
 import logging
 
@@ -20,6 +18,8 @@ logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
+
+
 
 def gettoken():
     file1 = "token.json"
@@ -49,32 +49,34 @@ async def on_ready():
     await client.change_presence(status=discord.Status.offline, activity=discord.Activity(type=discord.ActivityType.watching, name=f'{len(set(client.get_all_members()))} Users | !!sadcat '))
 
 @client.event
-async def on_message(message):
-    if not message.guild:
-        return 
-    elif  message.author.guild_permissions.manage_messages:
-        return 
-    elif "https://discord.gg" in message.content:
-        await message.delete()
-    elif "discord.gg" in message.content:
-        await message.delete()
-    await client.process_commands(message)
-
-@client.event
 async def on_message_edit(before, after):
     message = after
     if not message.guild:
-        return 
-    elif  message.author.guild_permissions.manage_messages:
-        return 
-    elif "https://discord.gg" in message.content:
-        await message.delete()         
-    elif "discord.gg" in message.content:
+        return
+    if "discord.gg" in message.content:
         await message.delete()
+        try:
+            await message.author.send("Don't post invite links.")
+        except discord.Forbidden:
+            await message.channel.send("Don't post invite links.")
 
     await client.process_commands(message)
-                
 
+@client.event
+async def on_message(message):
+    if not message.guild:
+        return
+
+    if "discord.gg" in message.content:
+        await message.delete()
+        try:
+            await message.author.send("Don't post invite links.")
+        except discord.Forbidden:
+            await message.channel.send("Don't post invite links.")
+
+
+    await client.process_commands(message)
+            
 @client.command()
 async def shutdown(ctx):
     if ctx.author.id == 259932683206000651:
