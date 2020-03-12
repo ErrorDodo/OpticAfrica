@@ -17,15 +17,16 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from .utils import checks
 import requests
-from profanity import profanity
+
 
 
 db = sqlite3.connect('main.sqlite', check_same_thread=False)
 cursor = db.cursor()
 Scheduler = AsyncIOScheduler()
 
+fo = open("./blacklist.txt", "r")
+CURSES = fo.read().splitlines()
 
-CURSES = ("nigger", "nigga", "dick", "cunt", "anal", "blowjob", "blow job", "dyke", "fag", "faggot", "jizz", "nig", "wank", "whore", "slut", "retard", "retarded", "bitch")
 
 
 
@@ -97,6 +98,8 @@ def start_scheduled():
 	Scheduler.start()
 	return
 
+
+
 class Mod(commands.Cog, name="Mod"):
 
     """List of mod commands"""
@@ -104,6 +107,7 @@ class Mod(commands.Cog, name="Mod"):
     def __init__(self, client):
         self.client = client
         self.raidmode = {}
+        
 
 
     @commands.command()
@@ -321,12 +325,9 @@ class Mod(commands.Cog, name="Mod"):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if profanity.contains_profanity(message.content):
-            await message.delete()
-            await message.author.send(f"{message.author.mention} don't use that type of language")
-        elif not await automod.check_curses(self, message):
+        if not await automod.check_curses(self, message):
             return
-        elif not profanity.contains_profanity(message.content) and not message.author.bot:
+        elif not message.author.bot:
             cursor.execute(f"SELECT UserID FROM users WHERE GuildID = {message.guild.id} AND UserID = {message.author.id}")
             result = cursor.fetchone()
             if result is None:
@@ -343,10 +344,7 @@ class Mod(commands.Cog, name="Mod"):
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         message = after
-        if profanity.contains_profanity(message.content):
-            await message.delete()
-            await message.author.send(f"{message.author.mention} don't use that type of language")
-        elif not await automod.check_curses(self, message):
+        if not await automod.check_curses(self, message):
             return
         await self.client.process_commands(message)
 
