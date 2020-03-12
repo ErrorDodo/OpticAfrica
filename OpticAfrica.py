@@ -53,6 +53,8 @@ async def on_message_edit(before, after):
     message = after
     if not message.guild:
         return
+    if message.author.guild_permissions.manage_messages:
+        return
     if "discord.gg" in message.content:
         await message.delete()
         try:
@@ -65,6 +67,9 @@ async def on_message_edit(before, after):
 @client.event
 async def on_message(message):
     if not message.guild:
+        return
+    
+    if message.author.guild_permissions.manage_messages:
         return
 
     if "discord.gg" in message.content:
