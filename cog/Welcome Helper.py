@@ -53,20 +53,13 @@ class WelcomeHelp(commands.Cog, name="Welcome"):
             roles = results1[0]
             pineapple = get(member.guild.roles, name=roles)
             await member.add_roles(pineapple)
-
+            
 
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_messages=True)
     async def welcome(self, ctx):
         """The start of the welcome command"""
         await ctx.send("Available Setup Commands: \nwelcome channel <#channel>\nwelcome text <message>\nrole <@role>")
-
-    @commands.command(hidden=True)
-    @commands.has_permissions(manage_messages=True)
-    async def getrole(self, ctx, role: discord.Role = None):
-        embed = discord.Embed()
-        embed.add_field(name="ID", value=role.id)
-        await ctx.send(embed=embed)
 
     @welcome.command()
     @commands.has_permissions(manage_messages=True)

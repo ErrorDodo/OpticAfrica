@@ -3,9 +3,10 @@
 
 # cog\Moderation.py: 16,17
 APScheduler == 3.6.3
+art==4.6
 
 # OpticAfrica.py: 6
-# cog\Events.py: 4
+# cog\Filter.py: 4
 # cog\Help.py: 7
 # cog\Moderation.py: 7
 # cog\NormalCommands.py: 7
@@ -18,7 +19,7 @@ aiohttp == 3.6.2
 asyncpg == 0.20.1
 
 # OpticAfrica.py: 3,4
-# cog\Events.py: 6,7
+# cog\Filter.py: 6,7
 # cog\Help.py: 3,4,6
 # cog\Moderation.py: 5
 # cog\NormalCommands.py: 3,4,6
@@ -26,6 +27,7 @@ asyncpg == 0.20.1
 # cog\sadcats.py: 3,4
 # cog\utils\checks.py: 1
 # cog\utils\context.py: 1,3
+# cog\utils\functions.py: 2,3
 # cog\utils\paginator.py: 2,3
 # cog\utils\time.py: 5
 # cog\uwu.py: 3,4
@@ -40,7 +42,7 @@ lxml == 4.5.0
 # cog\utils\time.py: 2
 parsedatetime == 2.5
 
-# cog\Moderation.py: 20
+# cog\Filter.py: 8
 profanity == 1.1
 
 # cog\utils\cache.py: 8
@@ -48,9 +50,6 @@ py-lru-cache == 0.1.4
 
 # cog\utils\time.py: 3
 python_dateutil == 2.8.1
-
-# OpticAfrica.py: 13
-regex == 2020.2.20
 
 # cog\Moderation.py: 19
 requests == 2.23.0

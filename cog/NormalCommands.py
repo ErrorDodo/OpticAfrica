@@ -9,6 +9,7 @@ import time
 from sys import stdout
 import json
 import io
+from art import *
 
 
 class NormalCommands(commands.Cog, name="Commands"):
@@ -109,6 +110,10 @@ class NormalCommands(commands.Cog, name="Commands"):
         else:
             await ctx.send(embed=em.set_image(url=user.avatar_url_as(format=format_type)))
 
+    @commands.command()
+    async def ASCII(self, ctx, *, art: str = None):
+        art2 = text2art(art, font='random')
+        await ctx.send("```" + art2 + "```")
 
     @commands.command()
     async def spotify(self, ctx, user: discord.Member=None):

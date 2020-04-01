@@ -15,8 +15,8 @@ import datetime
 import sqlite3
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from .utils import checks
 import requests
+from .utils import checks
 
 
 
@@ -24,8 +24,6 @@ db = sqlite3.connect('main.sqlite', check_same_thread=False)
 cursor = db.cursor()
 Scheduler = AsyncIOScheduler()
 
-fo = open("./blacklist.txt", "r")
-CURSES = fo.read().splitlines()
 
 
 
@@ -39,65 +37,6 @@ class Sinner(commands.Converter):
         else:
             raise commands.BadArgument("You cannot punish other staff members")
                                           
-
-
-class database:
-	def field(self, command, *values):
-		"""Return a value from a specific field."""
-		cursor.execute(command, tuple(values))
-		fetch = cursor.fetchone()
-		if fetch is not None:
-			return fetch[0]
-		return
-
-	def one_record(self, command, *values):
-		"""Return a single record (row) as a tuple."""
-		cursor.execute(command, tuple(values))
-		return cursor.fetchone()
-
-	def records(self, command, *values):
-		"""Return many records (rows) as a list of tuples."""
-		cursor.execute(command, tuple(values))
-		return cursor.fetchall()
-
-
-
-	def column(self, command, *values):
-		"""Return a column as a list."""
-		cursor.execute(command, tuple(values))
-		return [item[0] for item in cursor.fetchall()]
-
-	def execute(self, command, *values):
-		"""Execute an SQL command."""
-		cursor.execute(command, tuple(values))
-		return
-
-
-	def commit(self):
-		"""Commits (saves) the db."""
-		db.commit()
-		return
-
-	def disconnect(self):
-		"""Closes the db connection."""
-		db.close()
-		return
-
-
-class automod:
-    async def check_curses(self, message):
-        if any([curse in message.content.lower() for curse in CURSES]):
-            await message.delete()
-            await message.author.send(f"{message.author.mention} don't use that type of language")
-            return True
-        return False
-
-def start_scheduled():
-	"""Starts scheduled activities in one place."""
-	Scheduler.add_job(database.commit, CronTrigger())
-	Scheduler.start()
-	return
-
 
 
 class Mod(commands.Cog, name="Mod"):
@@ -321,42 +260,16 @@ class Mod(commands.Cog, name="Mod"):
             webhook = Webhook.from_url(url, adapter=AsyncWebhookAdapter(session))
             await webhook.send(text, username=user.display_name, avatar_url=user.avatar_url)
 
-      
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if not await automod.check_curses(self, message):
-            return
-        elif not message.author.bot:
-            cursor.execute(f"SELECT UserID FROM users WHERE GuildID = {message.guild.id} AND UserID = {message.author.id}")
-            result = cursor.fetchone()
-            if result is None:
-                sql = ("INSERT INTO users(GuildID, UserID, UserName, GuildName) VALUES(?,?,?,?)")
-                val = (message.guild.id, message.author.id, message.author.name, message.guild.name)
-                print(f"{message.author.name} in {message.guild.name} guild, has been added to the database")
-            elif result is not None:
-                return
-            cursor.execute(sql, val)
-            db.commit()
-        await self.client.process_commands(message)
-        
-
-    @commands.Cog.listener()
-    async def on_message_edit(self, before, after):
-        message = after
-        if not await automod.check_curses(self, message):
-            return
-        await self.client.process_commands(message)
-
-
-    
+          
     @commands.command()
+    @checks.is_admin()
     @commands.has_permissions(manage_messages=True)
     async def block(self, ctx, user: Sinner=None):
         """Blocks a user from chatting in current channel"""
         await ctx.channel.set_permissions(user, send_messages=False)
 
     @commands.command()
+    @checks.is_admin()
     @commands.has_permissions(manage_messages=True)
     async def unblock(self, ctx, user: Sinner=None):
         """Unblocks a user from current channel"""

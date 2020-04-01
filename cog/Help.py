@@ -76,17 +76,6 @@ class Helper(commands.Cog, name="Help"):
                     await ctx.message.add_reaction(emoji="👀")
                 await ctx.send(embed=embed)
 
-"""    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        try:
-            if hasattr(ctx.command, 'on_error'):
-                return
-            else:
-                embed = discord.Embed(title=f'Error in {ctx.command}', description=f'`{ctx.command.qualifed_name} {ctx.command.signature}`\n{error}', colour=0x43740)
-                await ctx.send(embed=embed)
-        except:
-            embed = discord.Embed(title=f'Error in {ctx.command}', description=f'{error}', colour=0x43740)
-            await ctx.send(embed=embed)"""
           
 
 

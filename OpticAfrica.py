@@ -9,7 +9,7 @@ from sys import stdout
 import json
 import io
 import os
-import sqlite3
+
 
 import logging
 
@@ -21,7 +21,7 @@ logger.addHandler(handler)
 
 
 
-def gettoken():
+def run():
     file1 = "token.json"
     with open(file1) as f:
         d = json.load(f)
@@ -48,39 +48,7 @@ async def on_ready():
     await asyncio.sleep(2)
     await client.change_presence(status=discord.Status.offline, activity=discord.Activity(type=discord.ActivityType.watching, name=f'{len(set(client.get_all_members()))} Users | !!sadcat '))
 
-@client.event
-async def on_message_edit(before, after):
-    message = after
-    if not message.guild:
-        return
-    if message.author.guild_permissions.manage_messages:
-        return
-    if "discord.gg" in message.content:
-        await message.delete()
-        try:
-            await message.author.send("Don't post invite links.")
-        except discord.Forbidden:
-            await message.channel.send("Don't post invite links.")
 
-    await client.process_commands(message)
-
-@client.event
-async def on_message(message):
-    if not message.guild:
-        return
-    
-    if message.author.guild_permissions.manage_messages:
-        return
-
-    if "discord.gg" in message.content:
-        await message.delete()
-        try:
-            await message.author.send("Don't post invite links.")
-        except discord.Forbidden:
-            await message.channel.send("Don't post invite links.")
-
-
-    await client.process_commands(message)
             
 @client.command()
 async def shutdown(ctx):
@@ -88,6 +56,5 @@ async def shutdown(ctx):
         await ctx.send("Bot is shutting down")
         await client.logout()
 
-gettoken()
-
+run()
 
