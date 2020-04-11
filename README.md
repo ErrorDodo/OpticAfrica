@@ -8,7 +8,7 @@ To view the database I would suggest downloading this:
 
 How to install:
 ```
-git clone https://github.com/DodoInBed/OpticAfrica
+git clone https://github.com/Pi769/OpticAfrica
 cd OpticAfrica
 
 Setup the database:
