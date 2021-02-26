@@ -13,7 +13,7 @@ art==4.6
 # cog\Welcome Helper.py: 7
 # cog\sadcats.py: 6
 # cog\uwu.py: 6
-aiohttp == 3.6.2
+aiohttp == 3.7.4
 
 # cog\utils\db.py: 40
 asyncpg == 0.20.1
