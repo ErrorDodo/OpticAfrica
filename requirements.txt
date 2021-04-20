@@ -16,7 +16,7 @@ art==4.6
 aiohttp == 3.6.2
 
 # cog\utils\db.py: 40
-asyncpg == 0.20.1
+asyncpg == 0.21.0
 
 # OpticAfrica.py: 3,4
 # cog\Filter.py: 6,7
